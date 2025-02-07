@@ -28,14 +28,16 @@ joysticks = None
 
 class Options:
     def __init__(self):
-        self.resolution = (1440, 800)
+        self.resolution = (600, 800)
         self.fullscreen = False
 
 class OptionsUIApp:
     def __init__(self):
+        os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (100,45)
         pygame.init()
         pygame.display.set_caption("Options UI")
         self.options = Options()
+
         if self.options.fullscreen:
             self.window_surface = pygame.display.set_mode(self.options.resolution,
                                                           pygame.FULLSCREEN)

@@ -1,5 +1,3 @@
-import threading
-
 import pygame
 import pygame_gui
 from collections import deque
@@ -7,27 +5,15 @@ import random
 
 import serial
 import serial.tools.list_ports
-import time
 import os
 import re
 
-import matplotlib as plt
-import numpy as np
-
-from serial.serialutil import to_bytes
-
 from pygame_gui import UIManager, PackageResource
 
-from pygame_gui.elements import UIWindow
 from pygame_gui.elements import UIButton
-from pygame_gui.elements import UIHorizontalSlider
 from pygame_gui.elements import UITextEntryLine
 from pygame_gui.elements import UIDropDownMenu
-from pygame_gui.elements import UIScreenSpaceHealthBar
 from pygame_gui.elements import UILabel
-from pygame_gui.elements import UIImage
-from pygame_gui.elements import UIPanel
-from pygame_gui.elements import UISelectionList
 from pygame_gui.elements.ui_text_box import UITextBox
 
 from pygame_gui.windows import UIMessageWindow
@@ -313,8 +299,13 @@ class OptionsUIApp:
                     
 def open_serial_log(log_path="./serial_log"):
     global serial_log_file
-    
-    dir_list = os.listdir(log_path)
+    try:
+        dir_list = os.listdir(log_path)
+    except Exception as e:
+        print("open_serial_log: ", e)
+        print("Creating a folder with name " + log_path)
+        os.mkdir(log_path)
+        dir_list = os.listdir(log_path)
     dir_list = [f for f in dir_list if os.path.isfile(log_path+'/'+f)]
 
     largest_index = 0
@@ -325,7 +316,9 @@ def open_serial_log(log_path="./serial_log"):
         res = list(map(int, temp))
         largest_index = max([largest_index, res[0]])
 
+    
     serial_log_file = open(log_path + '/serial_log_' + str(largest_index+1) + '.txt', 'w')
+        
 
 
 if __name__ == '__main__':

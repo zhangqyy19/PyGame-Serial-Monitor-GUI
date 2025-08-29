@@ -66,6 +66,7 @@ class OptionsUIApp:
         self.serial_connect_button = None
         self.serial_refresh_button = None
         self.serial_baudrate_textbox = None
+        self.serial_test_button = None #test button
 
         self.serial_msg_disp = None
         self.serial_msg_entry = None
@@ -123,6 +124,14 @@ class OptionsUIApp:
             'Press to Connect',
             self.ui_manager)
         
+        #test button
+        self.serial_test_button = UIButton(
+            pygame.Rect((int(self.options.resolution[0] * 0.99) - int(self.options.resolution[0] / 4),
+                            int(self.options.resolution[1] * 0.01)+int(self.options.resolution[1] /8)),
+                            (int(self.options.resolution[0] / 4), int(self.options.resolution[1] / 32))),
+            'Test Button',
+            self.ui_manager)
+
         self.serial_baudrate_textbox = UITextEntryLine(
             relative_rect=pygame.Rect((int(self.options.resolution[0] * 0.99) - int(self.options.resolution[0] / 4),
                             int(self.options.resolution[1] * 0.01)+int(self.options.resolution[1] / 32 * 3)),
@@ -235,6 +244,10 @@ class OptionsUIApp:
                                 self.serial_select_dropdown.add_options([str(port)])
                     except:
                         print("i don't know why but refresing failed")
+
+                if event.ui_element == self.serial_test_button:
+                    print("Test button pressed")
+                    
 
             if (event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED):
                 if (event.ui_element == self.test_drop_down):

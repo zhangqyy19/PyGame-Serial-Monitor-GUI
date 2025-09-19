@@ -19,6 +19,7 @@ from pygame_gui.elements.ui_text_box import UITextBox
 from pygame_gui.windows import UIMessageWindow
 
 import gvar_ctrl
+import event_functions
 
 enable_serial_monitor = 1 # 0-disable 1-in app 2-in terminal
 
@@ -84,96 +85,7 @@ class OptionsUIApp:
         self.all_shown = True
 
     def recreate_ui(self):
-        self.ui_manager.set_window_resolution(self.options.resolution)
-        self.ui_manager.clear_and_reset()
-
-        self.background_surface = pygame.Surface(self.options.resolution)
-        self.background_surface.fill(self.ui_manager.get_theme().get_colour('dark_bg'))
-
-        current_resolution_string = (str(self.options.resolution[0]) +
-                                     'x' +
-                                     str(self.options.resolution[1]))
-        self.test_drop_down = UIDropDownMenu(options_list=['1024x768', '1200x800', '1440x800', '1600x900', '800x600', '600x800'],
-                                             starting_option=current_resolution_string,
-                                             relative_rect = pygame.Rect((int(self.options.resolution[0] * 0.01),
-                                                          int(self.options.resolution[1] * 0.01)),
-                                                         (int(self.options.resolution[0] / 4), int(self.options.resolution[1] / 32))),
-                                             manager = self.ui_manager)
-
-        
-        self.serial_select_dropdown = UIDropDownMenu(
-            options_list=['not selected'],
-            starting_option='not selected',
-            relative_rect = pygame.Rect((int(self.options.resolution[0] * 0.99) - int(self.options.resolution[0] / 4),
-                            int(self.options.resolution[1] * 0.01)),
-                            (int(self.options.resolution[0] / 4), int(self.options.resolution[1] / 32))),
-            manager = self.ui_manager,
-            )
-        
-        self.serial_refresh_button = UIButton(
-            pygame.Rect((int(self.options.resolution[0] * 0.99) - int(self.options.resolution[0] / 4),
-                            int(self.options.resolution[1] * 0.01)+int(self.options.resolution[1] / 32)),
-                            (int(self.options.resolution[0] / 4), int(self.options.resolution[1] / 32))),
-            'Refresh COM Ports',
-            self.ui_manager)
-
-        self.serial_connect_button = UIButton(
-            pygame.Rect((int(self.options.resolution[0] * 0.99) - int(self.options.resolution[0] / 4),
-                            int(self.options.resolution[1] * 0.01)+int(self.options.resolution[1] / 16)),
-                            (int(self.options.resolution[0] / 4), int(self.options.resolution[1] / 32))),
-            'Press to Connect',
-            self.ui_manager)
-        
-        #test button
-        self.serial_test_button = UIButton(
-            pygame.Rect((int(self.options.resolution[0] * 0.99) - int(self.options.resolution[0] / 4),
-                            int(self.options.resolution[1] * 0.01)+int(self.options.resolution[1] /8)),
-                            (int(self.options.resolution[0] / 4), int(self.options.resolution[1] / 32))),
-            'Test Button',
-            self.ui_manager)
-
-        self.serial_baudrate_textbox = UITextEntryLine(
-            relative_rect=pygame.Rect((int(self.options.resolution[0] * 0.99) - int(self.options.resolution[0] / 4),
-                            int(self.options.resolution[1] * 0.01)+int(self.options.resolution[1] / 32 * 3)),
-                            (int(self.options.resolution[0] / 4), int(self.options.resolution[1] / 32))),
-            manager=self.ui_manager,
-            initial_text="115200"
-        )
-        
-        self.serial_monitor_mode_header_textbox = UILabel (
-            relative_rect= pygame.Rect((int(self.options.resolution[0] * 0.01),
-                        int(self.options.resolution[1] * 0.01)+int(self.options.resolution[1] / 32 * 1)),
-                        (int(self.options.resolution[0] / 4), int(self.options.resolution[1] / 32))),
-            text="Select serial output method"
-        )
-
-        self.serial_monitor_mode = UIDropDownMenu(
-            options_list=['In app', 'In terminal', 'Disable'],
-            starting_option='In app',
-            relative_rect= pygame.Rect((int(self.options.resolution[0] * 0.01),
-                        int(self.options.resolution[1] * 0.01)+int(self.options.resolution[1] / 32 * 2)),
-                        (int(self.options.resolution[0] / 4), int(self.options.resolution[1] / 32))),
-            manager=self.ui_manager,
-            object_id="#serialmonitor"
-        )
-
-        self.serial_msg_disp = UITextBox(
-            html_text="",
-            relative_rect=pygame.Rect((int(self.options.resolution[0] * 0.01 + self.options.resolution[0] / 4),
-                        int(self.options.resolution[1] * 0.01 + self.options.resolution[1] / 32)),
-                        (int(self.options.resolution[0] / 2 - self.options.resolution[0] * 0.02), int(self.options.resolution[1] * 28 / 32))),
-            manager=self.ui_manager
-        )
-
-        self.serial_msg_entry = UITextEntryLine(
-            relative_rect=pygame.Rect((int(self.options.resolution[0] * 0.01 + self.options.resolution[0] / 4),
-                        int(self.options.resolution[1] * 0.01)),
-                        (int(self.options.resolution[0] / 2 - self.options.resolution[0] * 0.02), int(self.options.resolution[1] / 32))), 
-            manager=self.ui_manager,
-            object_id='#serial_text_entry'
-        )
-
-        self.serial_msg_entry.set_text('')
+        event_functions.recreate_ui_helperfunction(self)
 
     def create_message_window(self):
         self.button_response_timer.tick()
